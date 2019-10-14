@@ -233,7 +233,7 @@ contract CryptoStructuredFund is ERC20Mintable {
 
     //sell ether to DAI 
     function pull() public {
-        require(time() > startSell && !fulfilled);
+        require(now > startSell && !fulfilled);
         uint256 portion = interpolation(startSell, stopSell, now);
         startSell = now;
 
