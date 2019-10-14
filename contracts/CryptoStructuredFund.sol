@@ -146,6 +146,9 @@ contract CryptoStructuredFund is ERC20Mintable {
 
     using SafeMath for uint256;
 
+    event Deposit(address indexed depositor, uint256 amount);
+    event Invest(address indexed investor, uint256 amount);
+
     string public constant name = "CryptoStructuredFund";
     string public constant symbol = "CSF";
     uint8 public constant decimals = 18;
@@ -183,6 +186,7 @@ contract CryptoStructuredFund is ERC20Mintable {
         require(DAI.transferFrom(msg.sender, address(this), amount));
         require(DAI.transfer(wallet, amount.mul(fee).div(1e18)));
         _mint(msg.sender, amount);
+        emit Deposit(msg.sender, amount);
     }
 
     // invest ether
@@ -191,6 +195,7 @@ contract CryptoStructuredFund is ERC20Mintable {
         require(wallet.send(msg.value.mul(fee).div(1e18)));
         investmentOf[msg.sender] = investmentOf[msg.sender].add(msg.value);
         totalInvestment = totalInvestment.add(msg.value);
+        emit Invest(msg.sender, msg.value);
     }
 
     // withdraw DAI
@@ -228,7 +233,7 @@ contract CryptoStructuredFund is ERC20Mintable {
 
     //sell ether to DAI 
     function pull() public {
-        require(now > startSell && !fulfilled);
+        require(time() > startSell && !fulfilled);
         uint256 portion = interpolation(startSell, stopSell, now);
         startSell = now;
 
