@@ -1,0 +1,53 @@
+{
+  "name": "crypto-structured-fund-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bignumber.js": "^9.0.0",
+    "react": "^16.9.0",
+    "react-device-detect": "^1.9.10",
+    "react-dom": "^16.9.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.1.2",
+    "recharts": "^1.7.1",
+    "styled-components": "^4.4.0",
+    "web3": "^2.0.0-alpha.1",
+    "web3-react": "^5.0.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "npx eslint './src/**/*.{js,jsx}'",
+    "lint:fix": "npx eslint --fix './src/**/*.{js,jsx}'",
+    "format": "npx prettier --check 'src/**/*.{js,jsx,scss}'",
+    "format:fix": "npx prettier --write 'src/**/*.{js,jsx,scss}'"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^6.4.0",
+    "husky": "^3.0.5",
+    "prettier": "1.18.2",
+    "pretty-quick": "^1.11.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && pretty-quick --staged"
+    }
+  }
+}
