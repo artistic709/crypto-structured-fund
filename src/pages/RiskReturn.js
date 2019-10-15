@@ -218,7 +218,7 @@ export default function RiskReturn() {
         </PurchaseBlock>
       </Row>
       <Row>
-        <DataBlock>
+        <DataBlock strong>
           <Title>Leverage</Title>
           <StrongText>{leverage ? leverage.toFixed(2) : '-'}</StrongText>
         </DataBlock>

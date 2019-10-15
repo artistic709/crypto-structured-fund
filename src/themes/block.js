@@ -31,6 +31,8 @@ export const PurchaseInfo = styled.div`
 export const DataBlock = styled.div`
   flex: 1;
   padding: 1.25rem 0;
+  border: 1px solid
+    ${({ strong, theme }) => (strong ? theme.neonGreen : theme.mirageBlue)};
   border-radius: 0.5rem;
   background-color: ${({ theme }) => theme.mirageBlue};
   display: flex;

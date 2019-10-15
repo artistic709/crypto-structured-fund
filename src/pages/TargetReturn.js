@@ -223,7 +223,7 @@ export default function TargetReturn() {
         </PurchaseBlock>
       </Row>
       <Row>
-        <DataBlock>
+        <DataBlock strong>
           <Title>Profit Rate</Title>
           <StrongText>
             {rate ? `${rate.times(100).toString()}%` : '-'}
