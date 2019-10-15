@@ -7,7 +7,8 @@ const Footer = styled.footer`
   background-color: ${({ theme }) => theme.mirageBlue};
 
   > .footer-content {
-    width: 64rem;
+    max-width: 64rem;
+    width: 90%;
     margin: 0 auto;
 
     > *:not(:first-child) {
