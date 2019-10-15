@@ -66,5 +66,5 @@ export function amountFormatter(amount, baseDecimals, displayDecimals = 4) {
 }
 
 export function dateFormatter(timestamp) {
-  return new Date(timestamp).toLocaleDateString()
+  return new Date(timestamp).toLocaleString(undefined, { hour12: false })
 }

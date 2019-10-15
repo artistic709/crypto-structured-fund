@@ -18,14 +18,17 @@ import {
   Headline,
   Title,
   SubTitle,
+  Text,
   StrongText,
   Bold,
 } from '../themes/typography'
 import {
   PurchaseBlock,
+  PurchaseBlockTop,
+  PurchaseBlockBottom,
   PurchaseInfo,
+  PurchaseDate,
   DataBlock,
-  DateBlock,
 } from '../themes/block'
 import {
   USDInput,
@@ -34,6 +37,7 @@ import {
   PurchaseButton,
 } from '../themes/form'
 import PriceToOutcomeChart from '../components/PriceToOutcomeChart'
+import { ReactComponent as Item } from '../assets/item.svg'
 
 export default function RiskReturn() {
   const { account } = useWeb3Context()
@@ -201,29 +205,12 @@ export default function RiskReturn() {
   return (
     <Container>
       <Row>
-        <PurchaseBlock>
-          <PurchaseInfo>
-            <Title>
-              <Bold>
-                Already Bought{' '}
-                {ethFundUnits ? amountFormatter(ethFundUnits, 18) : '0'} units.
-              </Bold>
-            </Title>
-            <SubTitle>
-              Your Balance: {ethBalance ? amountFormatter(ethBalance, 18) : '-'}{' '}
-              ETH
-            </SubTitle>
-          </PurchaseInfo>
-          {renderForm()}
-        </PurchaseBlock>
-      </Row>
-      <Row>
         <DataBlock strong>
           <Title>Leverage</Title>
           <StrongText>{leverage ? leverage.toFixed(2) : '-'}</StrongText>
         </DataBlock>
         <DataBlock>
-          <Title>Pool</Title>
+          <Title>Pool (ETH)</Title>
           <StrongText>
             {ethPool ? amountFormatter(ethPool, 18) : '-'}
           </StrongText>
@@ -232,6 +219,46 @@ export default function RiskReturn() {
           <Title>Investors</Title>
           <StrongText>{ethInvestorAmount || '-'}</StrongText>
         </DataBlock>
+      </Row>
+      <Row>
+        <PurchaseBlock>
+          <PurchaseBlockTop>
+            <PurchaseInfo>
+              <Title>
+                <Bold>
+                  Already Bought{' '}
+                  {ethFundUnits ? amountFormatter(ethFundUnits, 18) : '0'}{' '}
+                  units.
+                </Bold>
+              </Title>
+              <SubTitle>
+                Your Balance:{' '}
+                {ethBalance ? amountFormatter(ethBalance, 18) : '-'} ETH
+              </SubTitle>
+            </PurchaseInfo>
+            {renderForm()}
+          </PurchaseBlockTop>
+          <PurchaseBlockBottom>
+            <PurchaseDate>
+              <div className='item'>
+                <Item />
+                <Text>
+                  Purchase Due Date:{' '}
+                  {purchaseExpiringDate
+                    ? dateFormatter(purchaseExpiringDate)
+                    : '-'}
+                </Text>
+              </div>
+              <div className='item'>
+                <Item />
+                <Text>
+                  Redeem Starting Date:{' '}
+                  {redeemStartingDate ? dateFormatter(redeemStartingDate) : '-'}
+                </Text>
+              </div>
+            </PurchaseDate>
+          </PurchaseBlockBottom>
+        </PurchaseBlock>
       </Row>
       <Row>
         <Headline>
@@ -277,28 +304,6 @@ export default function RiskReturn() {
           </div>
         </DataBlock>
       </SubRow>
-      <Row>
-        <DateBlock>
-          <div className='date-info'>
-            <Title center>Purchase Expiring Date</Title>
-            <Title>
-              <Bold>
-                {purchaseExpiringDate
-                  ? dateFormatter(purchaseExpiringDate)
-                  : '-'}
-              </Bold>
-            </Title>
-          </div>
-          <div className='date-info'>
-            <Title center>Redeption Starting Date</Title>
-            <Title>
-              <Bold>
-                {redeemStartingDate ? dateFormatter(redeemStartingDate) : '-'}
-              </Bold>
-            </Title>
-          </div>
-        </DateBlock>
-      </Row>
     </Container>
   )
 }

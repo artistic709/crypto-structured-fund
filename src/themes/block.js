@@ -5,6 +5,9 @@ export const PurchaseBlock = styled.div`
   padding: 1.25rem 2rem;
   border-radius: 0.5rem;
   background-color: ${({ theme }) => theme.mirageBlue};
+`
+
+export const PurchaseBlockTop = styled.div`
   display: flex;
   flex-direction: column;
 
@@ -22,9 +25,29 @@ export const PurchaseBlock = styled.div`
   }
 `
 
+export const PurchaseBlockBottom = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+`
+
 export const PurchaseInfo = styled.div`
   > *:not(:first-child) {
     margin-top: 0.75rem;
+  }
+`
+
+export const PurchaseDate = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  > *:not(:first-child) {
+    margin-top: 0.75rem;
+  }
+
+  > .item {
+    display: flex;
+    align-items: center;
   }
 `
 

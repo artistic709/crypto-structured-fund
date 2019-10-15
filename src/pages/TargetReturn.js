@@ -22,12 +22,16 @@ import {
   Headline,
   Title,
   SubTitle,
+  Text,
   StrongText,
   Bold,
 } from '../themes/typography'
 import {
   PurchaseBlock,
+  PurchaseBlockTop,
+  PurchaseBlockBottom,
   PurchaseInfo,
+  PurchaseDate,
   DataBlock,
   DateBlock,
 } from '../themes/block'
@@ -37,6 +41,7 @@ import {
   PurchaseButton,
 } from '../themes/form'
 import PriceBarChart from '../components/PriceBarChart'
+import { ReactComponent as Item } from '../assets/item.svg'
 import BigNumber from 'bignumber.js'
 
 export default function TargetReturn() {
@@ -206,23 +211,6 @@ export default function TargetReturn() {
   return (
     <Container>
       <Row>
-        <PurchaseBlock>
-          <PurchaseInfo>
-            <Title>
-              <Bold>
-                Already Bought{' '}
-                {daiFundUnits ? amountFormatter(daiFundUnits, 18) : '0'} units.
-              </Bold>
-            </Title>
-            <SubTitle>
-              Your Balance: {daiBalance ? amountFormatter(daiBalance, 18) : '-'}{' '}
-              DAI
-            </SubTitle>
-          </PurchaseInfo>
-          {renderPurchaseForm()}
-        </PurchaseBlock>
-      </Row>
-      <Row>
         <DataBlock strong>
           <Title>Profit Rate</Title>
           <StrongText>
@@ -230,7 +218,7 @@ export default function TargetReturn() {
           </StrongText>
         </DataBlock>
         <DataBlock>
-          <Title>Pool</Title>
+          <Title>Pool (DAI)</Title>
           <StrongText>
             {daiPool ? amountFormatter(daiPool, 18) : '-'}
           </StrongText>
@@ -239,6 +227,46 @@ export default function TargetReturn() {
           <Title>Investors</Title>
           <StrongText>{daiInvestorAmount || '-'}</StrongText>
         </DataBlock>
+      </Row>
+      <Row>
+        <PurchaseBlock>
+          <PurchaseBlockTop>
+            <PurchaseInfo>
+              <Title>
+                <Bold>
+                  Already Bought{' '}
+                  {daiFundUnits ? amountFormatter(daiFundUnits, 18) : '0'}{' '}
+                  units.
+                </Bold>
+              </Title>
+              <SubTitle>
+                Your Balance:{' '}
+                {daiBalance ? amountFormatter(daiBalance, 18) : '-'} DAI
+              </SubTitle>
+            </PurchaseInfo>
+            {renderPurchaseForm()}
+          </PurchaseBlockTop>
+          <PurchaseBlockBottom>
+            <PurchaseDate>
+              <div className='item'>
+                <Item />
+                <Text>
+                  Purchase Due Date:{' '}
+                  {purchaseExpiringDate
+                    ? dateFormatter(purchaseExpiringDate)
+                    : '-'}
+                </Text>
+              </div>
+              <div className='item'>
+                <Item />
+                <Text>
+                  Redeem Starting Date:{' '}
+                  {redeemStartingDate ? dateFormatter(redeemStartingDate) : '-'}
+                </Text>
+              </div>
+            </PurchaseDate>
+          </PurchaseBlockBottom>
+        </PurchaseBlock>
       </Row>
       <Row>
         <Headline>Estimated Ether Price that you will get...</Headline>
@@ -272,28 +300,6 @@ export default function TargetReturn() {
           </div>
         </DataBlock>
       </SubRow>
-      <Row>
-        <DateBlock>
-          <div className='date-info'>
-            <Title center>Purchase Expiring Date</Title>
-            <Title>
-              <Bold>
-                {purchaseExpiringDate
-                  ? dateFormatter(purchaseExpiringDate)
-                  : '-'}
-              </Bold>
-            </Title>
-          </div>
-          <div className='date-info'>
-            <Title center>Redeption Starting Date</Title>
-            <Title>
-              <Bold>
-                {redeemStartingDate ? dateFormatter(redeemStartingDate) : '-'}
-              </Bold>
-            </Title>
-          </div>
-        </DateBlock>
-      </Row>
     </Container>
   )
 }

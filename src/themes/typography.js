@@ -29,6 +29,15 @@ export const SubTitle = styled.div`
   }
 `
 
+export const Text = styled.span`
+  font-size: 0.75rem;
+  font-weight: 400;
+
+  @media screen and (min-width: 600px) {
+    font-size: 1rem;
+  }
+`
+
 export const Bold = styled.span`
   font-weight: 500;
 `

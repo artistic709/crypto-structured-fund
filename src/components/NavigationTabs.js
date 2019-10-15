@@ -43,7 +43,7 @@ export default function NavigationTabs() {
   return (
     <Container>
       <NavWrapper>
-        <StyledNavLink to='/target-return'>Preferred Return</StyledNavLink>
+        <StyledNavLink to='/target-return'>Preferred Share</StyledNavLink>
         <StyledNavLink to='/risk-return'>Excess Return</StyledNavLink>
       </NavWrapper>
     </Container>
