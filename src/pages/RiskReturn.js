@@ -35,7 +35,7 @@ import {
 } from '../themes/form'
 import PriceToOutcomeChart from '../components/PriceToOutcomeChart'
 
-export default function RiskAppreciation() {
+export default function RiskReturn() {
   const { account } = useWeb3Context()
 
   const ethBalance = useEthBalance()

@@ -5,8 +5,8 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import NavigationTabs from '../components/NavigationTabs'
 
-const FixedIncome = lazy(() => import('./FixedIncome'))
-const RiskAppreciation = lazy(() => import('./RiskAppreciation'))
+const TargetReturn = lazy(() => import('./TargetReturn'))
+const RiskReturn = lazy(() => import('./RiskReturn'))
 
 const AppWrapper = styled.div`
   width: 100vw;
@@ -24,14 +24,14 @@ export default function Interface() {
         <NavigationTabs />
         <Suspense fallback={null}>
           <Switch>
-            <Route exact strict path='/target-income' component={FixedIncome} />
             <Route
               exact
               strict
-              path='/risk-appreciation'
-              component={RiskAppreciation}
+              path='/target-return'
+              component={TargetReturn}
             />
-            <Redirect to='/fixed-income' />
+            <Route exact strict path='/risk-return' component={RiskReturn} />
+            <Redirect to='/target-return' />
           </Switch>
         </Suspense>
         <Footer />

@@ -39,7 +39,7 @@ import {
 import PriceBarChart from '../components/PriceBarChart'
 import BigNumber from 'bignumber.js'
 
-export default function FixedIncome() {
+export default function TargetReturn() {
   const { account } = useWeb3Context()
 
   const daiBalance = useDaiBalance()

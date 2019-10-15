@@ -43,8 +43,8 @@ export default function NavigationTabs() {
   return (
     <Container>
       <NavWrapper>
-        <StyledNavLink to='/target-income'>Target Income</StyledNavLink>
-        <StyledNavLink to='/risk-appreciation'>Risk Appreciation</StyledNavLink>
+        <StyledNavLink to='/target-return'>Preferred Return</StyledNavLink>
+        <StyledNavLink to='/risk-return'>Excess Return</StyledNavLink>
       </NavWrapper>
     </Container>
   )
