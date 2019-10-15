@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import NavigationTabs from '../components/NavigationTabs'
+import { Title, Text } from '../themes/typography'
 
 const TargetReturn = lazy(() => import('./TargetReturn'))
 const RiskReturn = lazy(() => import('./RiskReturn'))
@@ -34,7 +35,19 @@ export default function Interface() {
             <Redirect to='/target-return' />
           </Switch>
         </Suspense>
-        <Footer />
+        <Footer>
+          <div className='footer-content'>
+            <Title>Disclaimer</Title>
+            <Text>
+              Structured Fund is not a licensed bank, broker-dealer, investment
+              advisor or an exchange.
+            </Text>
+            <Text>This Project is in beta. Use at your own risk.</Text>
+            <Text>
+              Structured Fund use Kyber Network to power its own service.
+            </Text>
+          </div>
+        </Footer>
       </BrowserRouter>
     </AppWrapper>
   )
