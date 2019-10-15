@@ -49,7 +49,7 @@ export default function PriceBarChart(props) {
         </ReferenceLine>
         <ReferenceLine y={lossPrice} stroke='#FF4D53' strokeDasharray='5 5'>
           <Label
-            value='Loss Price'
+            value='Break Even'
             fill='#FFFFFF'
             fontWeight={500}
             position='insideRight'
