@@ -8,10 +8,10 @@ import TransactionContextProvider, {
   Updater as TransactionContextUpdater,
 } from './contexts/transaction'
 import Web3Manager from './components/Web3Manager'
-import AppInterface from './pages'
 import NetworkOnlyConnector from './connectors/NetworkOnlyConnector'
 import InjectedConnector from './connectors/InjectedConnector'
 import ThemeProvider, { GlobalStyle } from './themes'
+import Router from './Router'
 
 const Network = new NetworkOnlyConnector({
   providerURL: process.env.REACT_APP_NETWORK_URL || '',
@@ -49,7 +49,7 @@ function App() {
         <ThemeProvider>
           <GlobalStyle />
           <Web3Manager>
-            <AppInterface />
+            <Router />
           </Web3Manager>
         </ThemeProvider>
       </ContextProviders>

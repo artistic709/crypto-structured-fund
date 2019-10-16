@@ -1,11 +1,11 @@
 import React, { useMemo, useState, useCallback } from 'react'
 import { useWeb3Context } from 'web3-react'
-import { useTransactionAdder } from '../contexts/transaction'
+import { useTransactionAdder } from '../../contexts/transaction'
 import {
   usePriceConvertionRate,
   useDaiBalance,
   useDaiAllowance,
-} from '../hooks/ethereum'
+} from '../../hooks/ethereum'
 import {
   useRate,
   useDaiPool,
@@ -15,9 +15,9 @@ import {
   useDaiFundRedeem,
   useEthPool,
   useFundDates,
-} from '../hooks/fund'
-import { amountFormatter, dateFormatter } from '../utils'
-import { Container, Row, SubRow, Spacer } from '../themes/layout'
+} from '../../hooks/fund'
+import { amountFormatter, dateFormatter } from '../../utils'
+import { Container, Row, SubRow, Spacer } from '../../themes/layout'
 import {
   Headline,
   Title,
@@ -25,7 +25,7 @@ import {
   Text,
   StrongText,
   Bold,
-} from '../themes/typography'
+} from '../../themes/typography'
 import {
   PurchaseBlock,
   PurchaseBlockTop,
@@ -33,14 +33,14 @@ import {
   PurchaseInfo,
   PurchaseDate,
   DataBlock,
-} from '../themes/block'
+} from '../../themes/block'
 import {
   PurchaseForm,
   PurchaseInputField,
   PurchaseButton,
-} from '../themes/form'
-import PriceBarChart from '../components/PriceBarChart'
-import { ReactComponent as Item } from '../assets/item.svg'
+} from '../../themes/form'
+import PriceBarChart from '../../components/PriceBarChart'
+import { ReactComponent as Item } from '../../assets/item.svg'
 import BigNumber from 'bignumber.js'
 
 export default function TargetReturn() {

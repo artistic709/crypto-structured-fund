@@ -58,6 +58,8 @@ export const DataBlock = styled.div`
     ${({ strong, theme }) => (strong ? theme.neonGreen : theme.mirageBlue)};
   border-radius: 0.5rem;
   background-color: ${({ theme }) => theme.mirageBlue};
+  box-shadow: ${({ strong, theme }) =>
+    strong ? `0 0 8px ${theme.neonGreen}` : 'none'}
   display: flex;
   flex-direction: column;
   align-items: center;

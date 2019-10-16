@@ -38,8 +38,36 @@ export const Text = styled.span`
   }
 `
 
+export const SubText = styled.span`
+  font-size: 0.5rem;
+  font-weight: 400;
+
+  @media screen and (min-width: 600px) {
+    font-size: 0.75rem;
+  }
+`
+
 export const Bold = styled.span`
-  font-weight: 500;
+  font-weight: 600;
+`
+
+export const Strong = styled.span`
+  color: ${({ theme }) => theme.neonGreen};
+`
+
+export const Underline = styled.span`
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    bottom: -2px;
+    width: calc(100% + 4px);
+    height: 2px;
+    border-radius: 1px;
+    background-color: ${({ theme }) => theme.neonGreen};
+  }
 `
 
 export const StrongText = styled.div`

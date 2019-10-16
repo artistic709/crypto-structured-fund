@@ -21,6 +21,7 @@ const LogoLink = styled(Link)`
   letter-spacing: 1px;
   text-decoration: none;
   color: ${({ theme }) => theme.neonGreen};
+  cursor: pointer;
 
   @media screen and (min-width: 600px) {
     font-size: 1.5rem;

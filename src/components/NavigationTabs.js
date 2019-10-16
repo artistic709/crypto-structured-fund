@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -40,11 +40,14 @@ const StyledNavLink = styled(NavLink).attrs({ activeClassName })`
 `
 
 export default function NavigationTabs() {
+  const { url } = useRouteMatch()
   return (
     <Container>
       <NavWrapper>
-        <StyledNavLink to='/target-return'>Preferred Share</StyledNavLink>
-        <StyledNavLink to='/risk-return'>Excess Return</StyledNavLink>
+        <StyledNavLink to={`${url}/target-return`}>
+          Preferred Share
+        </StyledNavLink>
+        <StyledNavLink to={`${url}/risk-return`}>Excess Return</StyledNavLink>
       </NavWrapper>
     </Container>
   )

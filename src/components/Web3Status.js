@@ -38,6 +38,7 @@ const ConnectButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 
   @media screen and (min-width: 600px) {
     width: 10rem;

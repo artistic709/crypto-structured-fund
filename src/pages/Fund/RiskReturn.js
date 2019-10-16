@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3Context } from 'web3-react'
-import { useTransactionAdder } from '../contexts/transaction'
-import { usePriceConvertionRate, useEthBalance } from '../hooks/ethereum'
+import { useTransactionAdder } from '../../contexts/transaction'
+import { usePriceConvertionRate, useEthBalance } from '../../hooks/ethereum'
 import {
   useDaiPool,
   useEthPool,
@@ -11,9 +11,9 @@ import {
   useEthFundPurchase,
   useEthFundRedeem,
   useFundDates,
-} from '../hooks/fund'
-import { amountFormatter, dateFormatter } from '../utils'
-import { Container, Row, SubRow, Spacer } from '../themes/layout'
+} from '../../hooks/fund'
+import { amountFormatter, dateFormatter } from '../../utils'
+import { Container, Row, SubRow, Spacer } from '../../themes/layout'
 import {
   Headline,
   Title,
@@ -21,7 +21,7 @@ import {
   Text,
   StrongText,
   Bold,
-} from '../themes/typography'
+} from '../../themes/typography'
 import {
   PurchaseBlock,
   PurchaseBlockTop,
@@ -29,15 +29,15 @@ import {
   PurchaseInfo,
   PurchaseDate,
   DataBlock,
-} from '../themes/block'
+} from '../../themes/block'
 import {
   USDInput,
   PurchaseForm,
   PurchaseInputField,
   PurchaseButton,
-} from '../themes/form'
-import PriceToOutcomeChart from '../components/PriceToOutcomeChart'
-import { ReactComponent as Item } from '../assets/item.svg'
+} from '../../themes/form'
+import PriceToOutcomeChart from '../../components/PriceToOutcomeChart'
+import { ReactComponent as Item } from '../../assets/item.svg'
 
 export default function RiskReturn() {
   const { account } = useWeb3Context()
