@@ -2,7 +2,7 @@
   "name": "crypto-structured-fund-frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://artistic709.github.io/crypto-structured-fund",
+  "homepage": "http://csf.pelith.com",
   "dependencies": {
     "bignumber.js": "^9.0.0",
     "react": "^16.9.0",
