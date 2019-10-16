@@ -135,7 +135,7 @@ export function useDaiFundPurchase() {
     async amount => {
       const deposit = fundContract.methods.deposit(amount)
       const estimatedGas = await deposit.estimateGas()
-      const gas = new BigNumber(estimatedGas).times(1.2).toFixed(0)
+      const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
       const gasPrice = await getPrice()
       return deposit.send({
         from: account,
@@ -156,7 +156,7 @@ export function useDaiFundRedeem() {
     async amount => {
       const withdraw = fundContract.methods.withdraw(amount)
       const estimatedGas = await withdraw.estimateGas()
-      const gas = new BigNumber(estimatedGas).times(1.2).toFixed(0)
+      const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
       const gasPrice = await getPrice()
       return withdraw.send({
         from: account,
@@ -244,7 +244,7 @@ export function useEthFundPurchase() {
     async amount => {
       const invest = fundContract.methods.invest()
       const estimatedGas = await invest.estimateGas()
-      const gas = new BigNumber(estimatedGas).times(1.2).toFixed(0)
+      const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
       const gasPrice = await getPrice()
       return invest.send({
         from: account,
@@ -266,7 +266,7 @@ export function useEthFundRedeem() {
     async amount => {
       const redeem = fundContract.methods.redeem(amount)
       const estimatedGas = await redeem.estimateGas()
-      const gas = new BigNumber(estimatedGas).times(1.2).toFixed(0)
+      const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
       const gasPrice = await getPrice()
       return redeem.send({
         from: account,

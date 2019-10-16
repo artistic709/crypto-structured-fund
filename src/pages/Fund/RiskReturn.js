@@ -13,7 +13,7 @@ import {
   useFundDates,
 } from '../../hooks/fund'
 import { amountFormatter, dateFormatter } from '../../utils'
-import { Container, Row, SubRow, Spacer } from '../../themes/layout'
+import { Container, Row, SubRow } from '../../themes/layout'
 import {
   Headline,
   Title,
@@ -117,6 +117,7 @@ export default function RiskReturn() {
           .toFixed(0),
       )
       return [
+        { price: lose100PercentPrice - 30, rate: 0 },
         { price: lose100PercentPrice, rate: 0 },
         { price: zeroProfitPrice, rate: 100 },
         { price: trippleProfitPrice, rate: 400 },
@@ -272,7 +273,7 @@ export default function RiskReturn() {
           </PurchaseBlockBottom>
         </PurchaseBlock>
       </Row>
-      <Row>
+      <Row justifyBetween>
         <Headline>
           Estimated Profits/unit if Ether hits USD
           <USDInput
@@ -284,7 +285,6 @@ export default function RiskReturn() {
             }}
           />
         </Headline>
-        <Spacer />
         <SubTitle>Unit: USD/ETH</SubTitle>
       </Row>
       <SubRow>

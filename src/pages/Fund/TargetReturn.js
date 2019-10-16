@@ -17,7 +17,7 @@ import {
   useFundDates,
 } from '../../hooks/fund'
 import { amountFormatter, dateFormatter } from '../../utils'
-import { Container, Row, SubRow, Spacer } from '../../themes/layout'
+import { Container, Row, SubRow } from '../../themes/layout'
 import {
   Headline,
   Title,
@@ -267,9 +267,8 @@ export default function TargetReturn() {
           </PurchaseBlockBottom>
         </PurchaseBlock>
       </Row>
-      <Row>
+      <Row justifyBetween>
         <Headline>Estimated Ether Price that you will get...</Headline>
-        <Spacer />
         <SubTitle>Unit: USD/ETH</SubTitle>
       </Row>
       <SubRow>

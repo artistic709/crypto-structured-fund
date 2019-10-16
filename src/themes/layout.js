@@ -13,6 +13,7 @@ export const Container = styled.div`
 export const Row = styled.div`
   margin-top: 1.5rem;
   display: flex;
+  justify-content: ${({ justifyBetween }) => justifyBetween && 'space-between'}
 
   > *:not(:first-child) {
     margin-left: 1.25rem;
