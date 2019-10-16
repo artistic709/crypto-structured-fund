@@ -22,7 +22,9 @@
     "lint": "npx eslint './src/**/*.{js,jsx}'",
     "lint:fix": "npx eslint --fix './src/**/*.{js,jsx}'",
     "format": "npx prettier --check 'src/**/*.{js,jsx,scss}'",
-    "format:fix": "npx prettier --write 'src/**/*.{js,jsx,scss}'"
+    "format:fix": "npx prettier --write 'src/**/*.{js,jsx,scss}'",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -41,6 +43,7 @@
   },
   "devDependencies": {
     "eslint": "^6.4.0",
+    "gh-pages": "^2.1.1",
     "husky": "^3.0.5",
     "prettier": "1.18.2",
     "pretty-quick": "^1.11.1"
