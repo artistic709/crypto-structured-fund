@@ -100,18 +100,20 @@ export default function TargetReturn() {
   }, [priceToGetFullProfit, priceToGetLoss, currentEthPrice])
 
   const onApprove = useCallback(async () => {
-    const approve = await daiApprove()
-    approve
-      .on('transactionHash', () => {
+    daiApprove(
+      hash => {
+        addTransaction(hash)
         setDaiApprovePending(true)
-      })
-      .on('receipt', () => {
+      },
+      receipt => {
         setDaiApprovePending(false)
-      })
-      .on('error', () => {
+      }, // dont work
+      () => {
         setDaiApprovePending(false)
-      })
-  }, [daiApprove])
+      },
+    )
+    setDaiApprovePending(false)
+  }, [daiApprove, addTransaction])
 
   const onPurchase = useCallback(async () => {
     const amountParsed = new BigNumber(amount).times(1e18).toString()
@@ -142,9 +144,7 @@ export default function TargetReturn() {
   const canRedeem = Date.now() > redeemStartingDate
 
   const renderPurchaseButton = () => {
-    if (daiApprovePending) {
-      return <PurchaseButton disabled>Pending...</PurchaseButton>
-    } else if (!daiAllowance) {
+    if (!daiAllowance) {
       return <PurchaseButton disabled>Purchase</PurchaseButton>
     } else if (daiAllowance.lt(amount)) {
       return (

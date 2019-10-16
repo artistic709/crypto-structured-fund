@@ -42,6 +42,7 @@ export const PurchaseButton = styled.button`
   font-size: 1rem;
   line-height: 3rem;
   outline: none;
+  cursor: pointer;
 
   &:focus {
     outline: none;
@@ -49,6 +50,7 @@ export const PurchaseButton = styled.button`
 
   &[disabled] {
     background-color: ${({ theme }) => theme.loblollyGray};
+    cursor: wait;
   }
 `
 

@@ -65,23 +65,31 @@ export function useDaiBalance() {
 
 export function useDaiAllowance() {
   const { account, networkId } = useWeb3Context()
+  const blockNumber = useBlockNumber()
   const daiContract = useContract(DAI_ADDRESSES[networkId], DAI_ABI)
   const { getPrice } = useGasPrice()
   const [allowance, setAllowance] = useState()
 
-  const approve = useCallback(async () => {
-    const approveFund = daiContract.methods.approve(
-      CRYPTO_STRUCTURED_FUND_ADDRESSES[networkId],
-    )
-    const gas = await approveFund.estimateGas()
-    const gasPrice = await getPrice()
+  const approve = useCallback(
+    async (onTransactionHash, onReceipt, onError) => {
+      const approveFund = daiContract.methods.approve(
+        CRYPTO_STRUCTURED_FUND_ADDRESSES[networkId],
+      )
+      const gas = await approveFund.estimateGas()
+      const gasPrice = await getPrice()
 
-    return approveFund.send({
-      from: account,
-      gas,
-      gasPrice,
-    })
-  }, [daiContract, getPrice, account, networkId])
+      approveFund
+        .send({
+          from: account,
+          gas,
+          gasPrice,
+        })
+        .on('error', onError)
+        .on('receipt', onReceipt)
+        .on('transactionHash', onTransactionHash)
+    },
+    [daiContract, getPrice, account, networkId],
+  )
 
   useEffect(() => {
     daiContract.methods
@@ -93,7 +101,7 @@ export function useDaiAllowance() {
       .catch(() => {
         setAllowance()
       })
-  }, [daiContract, account, networkId])
+  }, [daiContract, account, networkId, blockNumber])
 
   return { allowance, approve }
 }

@@ -137,6 +137,8 @@ export function useDaiFundPurchase() {
       const estimatedGas = await deposit.estimateGas()
       const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
       const gasPrice = await getPrice()
+
+      // BUG
       return deposit.send({
         from: account,
         gas,
@@ -158,6 +160,8 @@ export function useDaiFundRedeem() {
       const estimatedGas = await withdraw.estimateGas()
       const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
       const gasPrice = await getPrice()
+
+      // BUG
       return withdraw.send({
         from: account,
         gas,
@@ -246,6 +250,8 @@ export function useEthFundPurchase() {
       const estimatedGas = await invest.estimateGas()
       const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
       const gasPrice = await getPrice()
+
+      // BUG
       return invest.send({
         from: account,
         value: amount,
@@ -268,6 +274,8 @@ export function useEthFundRedeem() {
       const estimatedGas = await redeem.estimateGas()
       const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
       const gasPrice = await getPrice()
+
+      // BUG
       return redeem.send({
         from: account,
         gas,
