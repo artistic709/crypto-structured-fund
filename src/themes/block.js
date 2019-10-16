@@ -54,19 +54,30 @@ export const PurchaseDate = styled.div`
 export const DataBlock = styled.div`
   flex: 1;
   padding: 1.25rem 0;
-  border: 1px solid
-    ${({ strong, theme }) => (strong ? theme.neonGreen : theme.mirageBlue)};
   border-radius: 0.5rem;
   background-color: ${({ theme }) => theme.mirageBlue};
-  box-shadow: ${({ strong, theme }) =>
-    strong ? `0 0 8px ${theme.neonGreen}` : 'none'}
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 
   > *:not(:first-child) {
     margin-top: 0.5rem;
   }
+
+  ${({ strong, theme }) =>
+    strong &&
+    `
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2rem;
+      height: 2rem;
+      background: linear-gradient(135deg, transparent 0% 30%, ${theme.eucalyptusGreen} 30% 50%, transparent 50%);
+    }
+  `}
 `
 
 export const DateBlock = styled.div`
