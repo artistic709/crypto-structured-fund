@@ -8,11 +8,21 @@ import {
   Label,
 } from 'recharts'
 
+const renderYAxisTick = ({ x, y, payload }) => {
+  const fill = payload.value === 100 ? '#F9FF2D' : '#FFFFFF'
+  return (
+    <text x={x - 10} y={y} fill={fill} width='80' textAnchor='middle'>
+      {`${payload.value}%`}
+    </text>
+  )
+}
+
 export default function PriceToOutcomeChart(props) {
   const { data } = props
+  const sorted = data.sort((a, b) => a.price - b.price)
   return (
     <ResponsiveContainer>
-      <LineChart data={data}>
+      <LineChart data={sorted}>
         <XAxis
           dataKey='price'
           stroke='#FFFFFF'
@@ -36,8 +46,8 @@ export default function PriceToOutcomeChart(props) {
           padding={{ top: 30, bottom: 30 }}
           axisLine={false}
           tickLine={false}
-          tick={{ fontWeight: 500 }}
-          tickFormatter={value => `${value}%`}
+          tick={renderYAxisTick}
+          // tickFormatter={value => `${value}%`}
         >
           <Label
             value='Outcome / Current Price'
