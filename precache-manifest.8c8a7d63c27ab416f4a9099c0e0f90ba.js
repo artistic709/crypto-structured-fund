@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b54510485f439246e4210f57dcee44c7",
+    "revision": "4b5baa826071ca98d5b890ab67ca480e",
     "url": "/crypto-structured-fund/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/crypto-structured-fund/static/js/0.c75e7c8b.chunk.js"
   },
   {
-    "revision": "de1c10cae22d0af19c14",
-    "url": "/crypto-structured-fund/static/js/1.1ade3d84.chunk.js"
+    "revision": "f1e3fc4b0169de452674",
+    "url": "/crypto-structured-fund/static/js/1.1e2c8a20.chunk.js"
   },
   {
     "revision": "46cbcd819cbf4803134d",
@@ -24,20 +24,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/crypto-structured-fund/static/js/6.38caf970.chunk.js"
   },
   {
-    "revision": "7f9a1746676ed22d04b1",
-    "url": "/crypto-structured-fund/static/js/7.67658b04.chunk.js"
+    "revision": "994e6cfd525093c5aecf",
+    "url": "/crypto-structured-fund/static/js/7.d6c124ca.chunk.js"
   },
   {
-    "revision": "d8a2fb527edf7db72a2f",
-    "url": "/crypto-structured-fund/static/js/8.85ead8de.chunk.js"
+    "revision": "9537139789b02d64811e",
+    "url": "/crypto-structured-fund/static/js/8.e517bd05.chunk.js"
   },
   {
     "revision": "a2bdfb6fa9366431b933",
     "url": "/crypto-structured-fund/static/js/main.971e7646.chunk.js"
   },
   {
-    "revision": "80d306745b631d916e26",
-    "url": "/crypto-structured-fund/static/js/runtime-main.dbcf1aae.js"
+    "revision": "c47031239a6af2c021fe",
+    "url": "/crypto-structured-fund/static/js/runtime-main.d4fdd224.js"
   },
   {
     "revision": "749ed66c8557b3e65fa580980f49e6cc",
