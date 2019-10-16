@@ -102,7 +102,7 @@ export default function TargetReturn() {
   const onApprove = useCallback(async () => {
     const approve = await daiApprove()
     approve
-      .on('transactionHach', () => {
+      .on('transactionHash', () => {
         setDaiApprovePending(true)
       })
       .on('receipt', () => {
@@ -142,7 +142,9 @@ export default function TargetReturn() {
   const canRedeem = Date.now() > redeemStartingDate
 
   const renderPurchaseButton = () => {
-    if (!daiAllowance) {
+    if (daiApprovePending) {
+      return <PurchaseButton disabled>Pending...</PurchaseButton>
+    } else if (!daiAllowance) {
       return <PurchaseButton disabled>Purchase</PurchaseButton>
     } else if (daiAllowance.lt(amount)) {
       return (
@@ -150,8 +152,6 @@ export default function TargetReturn() {
           Unlock
         </PurchaseButton>
       )
-    } else if (daiApprovePending) {
-      return <PurchaseButton disabled>Pending...</PurchaseButton>
     } else {
       return (
         <PurchaseButton onClick={onPurchase} disabled={!connected}>
