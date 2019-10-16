@@ -120,11 +120,23 @@ export default function RiskReturn() {
         { price: lose100PercentPrice, rate: 0 },
         { price: zeroProfitPrice, rate: 100 },
         { price: trippleProfitPrice, rate: 400 },
+        {
+          price: price,
+          rate: parseInt(estimatedProfitRate.times(100).toFixed(0)) + 100,
+          active: true,
+        },
       ]
     } else {
       return []
     }
-  }, [daiPool, ethPool, totalPoolInEth, currentEthPrice])
+  }, [
+    daiPool,
+    ethPool,
+    totalPoolInEth,
+    currentEthPrice,
+    price,
+    estimatedProfitRate,
+  ])
 
   const onPurchase = useCallback(async () => {
     const amountParsed = new BigNumber(amount).times(1e18).toString()
