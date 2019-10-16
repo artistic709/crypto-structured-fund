@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "cbca89c1c190b9a88ed358a22daa9381",
+    "revision": "b54510485f439246e4210f57dcee44c7",
     "url": "/crypto-structured-fund/index.html"
   },
   {

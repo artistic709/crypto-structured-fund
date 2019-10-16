@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/crypto-structured-fund/precache-manifest.c4573b4b3e99bfee0fc6159be4340f25.js"
+  "/crypto-structured-fund/precache-manifest.e556e44eff6e54736faf0b742871fa66.js"
 );
 
 self.addEventListener('message', (event) => {
