@@ -80,6 +80,7 @@ const HeroImage = styled.div`
     position: absolute;
     bottom: 0;
     right: 0;
+    width: 400px;
   }
 
   @media screen and (min-width: 800px) {
