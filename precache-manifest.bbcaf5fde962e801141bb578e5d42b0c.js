@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "916e0a49e6eff1826b8b9ac71ae7fb57",
+    "revision": "0323051995f90486ce28abfc5c652e82",
     "url": "/index.html"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/js/4.32fbd036.chunk.js"
   },
   {
-    "revision": "d4d5d1c2406efd9d3d2d",
-    "url": "/static/js/5.2ea56459.chunk.js"
+    "revision": "52e9600f1218f152b121",
+    "url": "/static/js/5.ee8d2d99.chunk.js"
   },
   {
     "revision": "2b9c82c7426e236d35dc",
@@ -36,12 +36,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/js/main.3de8f92b.chunk.js"
   },
   {
-    "revision": "6979c139d6daf5900e09",
-    "url": "/static/js/runtime-main.7aa069cf.js"
+    "revision": "37f51724c67ceff93e66",
+    "url": "/static/js/runtime-main.70ddd84a.js"
   },
   {
-    "revision": "749ed66c8557b3e65fa580980f49e6cc",
-    "url": "/static/media/champagne_tower.749ed66c.png"
+    "revision": "fb54803688420f128d97fb4865c1a50f",
+    "url": "/static/media/champagne_tower.fb548036.png"
   },
   {
     "revision": "e3c71cc2e63d58ba008b4c943191e7e0",
