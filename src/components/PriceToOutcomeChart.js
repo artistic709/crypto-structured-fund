@@ -6,6 +6,7 @@ import {
   XAxis,
   YAxis,
   Label,
+  Legend,
 } from 'recharts'
 
 function renderYAxisTick({ x, y, payload }) {
@@ -23,8 +24,9 @@ function renderShape({ cx, cy, r, payload }) {
 }
 
 export default function PriceToOutcomeChart(props) {
-  const { data } = props
-  const sorted = data.sort((a, b) => a.price - b.price)
+  const { investingData, holdingData } = props
+  const sortedInvestingData = investingData.sort((a, b) => a.price - b.price)
+  const sortedHoldingData = holdingData.sort((a, b) => a.price - b.price)
   return (
     <ResponsiveContainer>
       <ScatterChart>
@@ -70,11 +72,19 @@ export default function PriceToOutcomeChart(props) {
             fontWeight={500}
           />
         </YAxis>
+        <Legend verticalAlign='top' height={36} iconSize={8} />
         <Scatter
-          data={sorted}
+          name='Outcome if Investing'
+          data={sortedInvestingData}
           line={{ stroke: '#00FF8C', strokeWidth: 4 }}
           fill='#00FF8C'
           shape={renderShape}
+        />
+        <Scatter
+          name='Outcome if Holding'
+          data={sortedHoldingData}
+          line={{ stroke: '#00C8FF', strokeWidth: 4 }}
+          fill='#00C8FF'
         />
       </ScatterChart>
     </ResponsiveContainer>

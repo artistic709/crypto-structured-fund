@@ -74,7 +74,7 @@ export default function RiskReturn() {
   )
 
   const estimatedProfits = useMemo(() => {
-    if (totalPoolInEth && price && daiPool && ethPool) {
+    if (totalPoolInEth && daiPool && ethPool) {
       const profitPerUnit = totalPoolInEth
         .times(price)
         .minus(daiPool.times(1.2))
@@ -116,7 +116,35 @@ export default function RiskReturn() {
           .div(totalPoolInEth)
           .toFixed(0),
       )
-      return [
+
+      const zeroProfitRateIfHolding = parseInt(
+        new BigNumber(zeroProfitPrice)
+          .minus(currentEthPrice)
+          .div(currentEthPrice)
+          .times(100)
+          .plus(100)
+          .toFixed(0),
+      )
+
+      const trippleProfitRateIfHolding = parseInt(
+        new BigNumber(trippleProfitPrice)
+          .minus(currentEthPrice)
+          .div(currentEthPrice)
+          .times(100)
+          .plus(100)
+          .toFixed(0),
+      )
+
+      const profitRateIfHolding = parseInt(
+        new BigNumber(price)
+          .minus(currentEthPrice)
+          .div(currentEthPrice)
+          .times(100)
+          .plus(100)
+          .toFixed(0),
+      )
+
+      const investingOutcomeData = [
         { price: lose100PercentPrice - 30, rate: 0 },
         { price: lose100PercentPrice, rate: 0 },
         { price: zeroProfitPrice, rate: 100 },
@@ -127,8 +155,16 @@ export default function RiskReturn() {
           active: true,
         },
       ]
+
+      const holdingOutcomeData = [
+        { price: zeroProfitPrice, rate: zeroProfitRateIfHolding },
+        { price: trippleProfitPrice, rate: trippleProfitRateIfHolding },
+        { price: price, rate: profitRateIfHolding, active: true },
+      ]
+
+      return { investingOutcomeData, holdingOutcomeData }
     } else {
-      return []
+      return { investingOutcomeData: [], holdingOutcomeData: [] }
     }
   }, [
     daiPool,
@@ -312,7 +348,10 @@ export default function RiskReturn() {
       <SubRow>
         <DataBlock>
           <div style={{ width: '90%', height: '300px' }}>
-            <PriceToOutcomeChart data={chartData} />
+            <PriceToOutcomeChart
+              investingData={chartData.investingOutcomeData}
+              holdingData={chartData.holdingOutcomeData}
+            />
           </div>
         </DataBlock>
       </SubRow>
