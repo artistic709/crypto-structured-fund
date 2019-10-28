@@ -132,18 +132,23 @@ export function useDaiFundPurchase() {
   const { getPrice } = useGasPrice()
 
   return useCallback(
-    async amount => {
+    async (amount, onTransactionHash, onConfirmation, onError) => {
       const deposit = fundContract.methods.deposit(amount)
       const estimatedGas = await deposit.estimateGas()
       const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
       const gasPrice = await getPrice()
 
-      // BUG
-      return deposit.send({
-        from: account,
-        gas,
-        gasPrice,
-      })
+      return deposit
+        .send({
+          from: account,
+          gas,
+          gasPrice,
+        })
+        .on('transactionHash', onTransactionHash)
+        .on('confirmation', (number, receipt) => {
+          if (number === 1) onConfirmation(receipt)
+        })
+        .on('error', onError)
     },
     [fundContract, account, getPrice],
   )
@@ -155,18 +160,23 @@ export function useDaiFundRedeem() {
   const { getPrice } = useGasPrice()
 
   return useCallback(
-    async amount => {
+    async (amount, onTransactionHash, onConfirmation, onError) => {
       const withdraw = fundContract.methods.withdraw(amount)
       const estimatedGas = await withdraw.estimateGas()
       const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
       const gasPrice = await getPrice()
 
-      // BUG
-      return withdraw.send({
-        from: account,
-        gas,
-        gasPrice,
-      })
+      return withdraw
+        .send({
+          from: account,
+          gas,
+          gasPrice,
+        })
+        .on('transactionHash', onTransactionHash)
+        .on('confirmation', (number, receipt) => {
+          if (number === 1) onConfirmation(receipt)
+        })
+        .on('error', onError)
     },
     [account, fundContract, getPrice],
   )
@@ -245,18 +255,27 @@ export function useEthFundPurchase() {
   const { getPrice } = useGasPrice()
 
   return useCallback(
-    async amount => {
+    (amount, onTransactionHash, onConfirmation, onError) => {
       const invest = fundContract.methods.invest()
-      const estimatedGas = await invest.estimateGas()
-      const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
-      const gasPrice = await getPrice()
 
-      // BUG
-      return invest.send({
-        from: account,
-        value: amount,
-        gas,
-        gasPrice,
+      return Promise.all([
+        invest.estimateGas({ value: amount }),
+        getPrice(),
+      ]).then(([estimatedGas, gasPrice]) => {
+        const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
+
+        return invest
+          .send({
+            from: account,
+            value: amount,
+            gas,
+            gasPrice,
+          })
+          .on('transactionHash', onTransactionHash)
+          .on('confirmation', (number, receipt) => {
+            if (number === 1) onConfirmation(receipt)
+          })
+          .on('error', onError)
       })
     },
     [fundContract, account, getPrice],
@@ -269,18 +288,26 @@ export function useEthFundRedeem() {
   const { getPrice } = useGasPrice()
 
   return useCallback(
-    async amount => {
+    (amount, onTransactionHash, onConfirmation, onError) => {
       const redeem = fundContract.methods.redeem(amount)
-      const estimatedGas = await redeem.estimateGas()
-      const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
-      const gasPrice = await getPrice()
 
-      // BUG
-      return redeem.send({
-        from: account,
-        gas,
-        gasPrice,
-      })
+      return Promise.all([redeem.estimateGas(), getPrice()]).then(
+        ([estimatedGas, gasPrice]) => {
+          const gas = new BigNumber(estimatedGas).times(1.5).toFixed(0)
+
+          return redeem
+            .send({
+              from: account,
+              gas,
+              gasPrice,
+            })
+            .on('transactionHash', onTransactionHash)
+            .on('confirmation', (number, receipt) => {
+              if (number === 1) onConfirmation(receipt)
+            })
+            .on('error', onError)
+        },
+      )
     },
     [account, fundContract, getPrice],
   )

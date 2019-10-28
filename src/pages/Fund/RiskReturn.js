@@ -177,26 +177,30 @@ export default function RiskReturn() {
 
   const onPurchase = useCallback(async () => {
     const amountParsed = new BigNumber(amount).times(1e18).toString()
-    const purchase = await purchaseEthFund(amountParsed)
-    purchase
-      .on('transactionHash', hash => {
-        addTransaction(hash)
-      })
-      .on('error', () => {
-        setAmount('')
-      })
+    const onTransactionHash = hash => {
+      addTransaction(hash)
+    }
+    const onConfirmation = () => {
+      setAmount('')
+    }
+    const onError = () => {
+      setAmount('')
+    }
+    purchaseEthFund(amountParsed, onTransactionHash, onConfirmation, onError)
   }, [purchaseEthFund, addTransaction, amount])
 
   const onRedeem = useCallback(async () => {
     const amountParsed = new BigNumber(amount).times(1e18).toString()
-    const redeem = await redeemEthFund(amountParsed)
-    redeem
-      .on('transactionHash', hash => {
-        addTransaction(hash)
-      })
-      .on('error', () => {
-        setAmount('')
-      })
+    const onTransactionHash = hash => {
+      addTransaction(hash)
+    }
+    const onConfirmation = () => {
+      setAmount('')
+    }
+    const onError = () => {
+      setAmount('')
+    }
+    redeemEthFund(amountParsed, onTransactionHash, onConfirmation, onError)
   }, [redeemEthFund, amount, addTransaction])
 
   const canPurchase = Date.now() < purchaseExpiringDate

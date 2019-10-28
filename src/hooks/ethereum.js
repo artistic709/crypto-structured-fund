@@ -71,22 +71,24 @@ export function useDaiAllowance() {
   const [allowance, setAllowance] = useState()
 
   const approve = useCallback(
-    async (onTransactionHash, onReceipt, onError) => {
+    async (onTransactionHash, onConfirmation, onError) => {
       const approveFund = daiContract.methods.approve(
         CRYPTO_STRUCTURED_FUND_ADDRESSES[networkId],
       )
       const gas = await approveFund.estimateGas()
       const gasPrice = await getPrice()
 
-      approveFund
+      return approveFund
         .send({
           from: account,
           gas,
           gasPrice,
         })
-        .on('error', onError)
-        .on('receipt', onReceipt)
         .on('transactionHash', onTransactionHash)
+        .on('confirmation', (number, receipt) => {
+          if (number === 1) onConfirmation(receipt)
+        })
+        .on('error', onError)
     },
     [daiContract, getPrice, account, networkId],
   )

@@ -100,43 +100,45 @@ export default function TargetReturn() {
   }, [priceToGetFullProfit, priceToGetLoss, currentEthPrice])
 
   const onApprove = useCallback(async () => {
-    daiApprove(
-      hash => {
-        addTransaction(hash)
-        setDaiApprovePending(true)
-      },
-      receipt => {
-        setDaiApprovePending(false)
-      }, // dont work
-      () => {
-        setDaiApprovePending(false)
-      },
-    )
-    setDaiApprovePending(false)
+    const onTransactionHash = hash => {
+      addTransaction(hash)
+      setDaiApprovePending(true)
+    }
+    const onConfirmation = () => {
+      setDaiApprovePending(false)
+    }
+    const onError = () => {
+      setDaiApprovePending(false)
+    }
+    daiApprove(onTransactionHash, onConfirmation, onError)
   }, [daiApprove, addTransaction])
 
   const onPurchase = useCallback(async () => {
     const amountParsed = new BigNumber(amount).times(1e18).toString()
-    const purchase = await purchaseDaiFund(amountParsed)
-    purchase
-      .on('transactionHash', hash => {
-        addTransaction(hash)
-      })
-      .on('error', () => {
-        setAmount('')
-      })
+    const onTransactionHash = hash => {
+      addTransaction(hash)
+    }
+    const onConfirmation = () => {
+      setAmount('')
+    }
+    const onError = () => {
+      setAmount('')
+    }
+    purchaseDaiFund(amountParsed, onTransactionHash, onConfirmation, onError)
   }, [purchaseDaiFund, amount, addTransaction])
 
   const onRedeem = useCallback(async () => {
     const amountParsed = new BigNumber(amount).times(1e18).toString()
-    const redeem = await redeemDaiFund(amountParsed)
-    redeem
-      .on('transactionHash', hash => {
-        addTransaction(hash)
-      })
-      .on('error', () => {
-        setAmount('')
-      })
+    const onTransactionHash = hash => {
+      addTransaction(hash)
+    }
+    const onConfirmation = () => {
+      setAmount('')
+    }
+    const onError = () => {
+      setAmount('')
+    }
+    redeemDaiFund(amountParsed, onTransactionHash, onConfirmation, onError)
   }, [redeemDaiFund, amount, addTransaction])
 
   const canPurchase = Date.now() < purchaseExpiringDate
@@ -144,8 +146,10 @@ export default function TargetReturn() {
   const canRedeem = Date.now() > redeemStartingDate
 
   const renderPurchaseButton = () => {
-    if (!daiAllowance) {
+    if (!daiAllowance || !amount) {
       return <PurchaseButton disabled>Purchase</PurchaseButton>
+    } else if (daiApprovePending) {
+      return <PurchaseButton disabled>Pending...</PurchaseButton>
     } else if (daiAllowance.lt(amount)) {
       return (
         <PurchaseButton onClick={onApprove} disabled={!connected}>
