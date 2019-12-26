@@ -73,6 +73,26 @@ export default function RiskReturn() {
     [totalPoolInEth, ethPool],
   )
 
+  const currentProfits = useMemo(() => {
+    if (totalPoolInEth && daiPool && ethPool) {
+      const profitPerUnit = totalPoolInEth
+        .times(currentEthPrice)
+        .minus(daiPool.times(1.2))
+        .div(ethPool)
+      return profitPerUnit.gt(0) ? profitPerUnit : new BigNumber(0)
+    } else {
+      return null
+    }
+  }, [currentEthPrice, daiPool, ethPool, totalPoolInEth])
+
+  const currentProfitRate = useMemo(
+    () =>
+      currentProfits && currentEthPrice
+        ? currentProfits.minus(currentEthPrice).div(currentEthPrice)
+        : null,
+    [currentEthPrice, currentProfits],
+  )
+
   const estimatedProfits = useMemo(() => {
     if (totalPoolInEth && daiPool && ethPool) {
       const profitPerUnit = totalPoolInEth
@@ -313,6 +333,38 @@ export default function RiskReturn() {
           </PurchaseBlockBottom>
         </PurchaseBlock>
       </Row>
+      {!canPurchase && !canRedeem && (
+        <>
+          <Row justifyBetween>
+            <Headline>
+              Your Profit/unit according to current Ether Price
+            </Headline>
+            <SubTitle>Unit: USD/ETH</SubTitle>
+          </Row>
+          <SubRow>
+            <DataBlock>
+              <Title>Current Price</Title>
+              <StrongText>
+                {currentEthPrice ? currentEthPrice.toFixed(2) : '-'}
+              </StrongText>
+            </DataBlock>
+            <DataBlock>
+              <Title>Outcomes</Title>
+              <StrongText>
+                {currentProfits ? currentProfits.toFixed(4) : '-'}
+              </StrongText>
+            </DataBlock>
+            <DataBlock>
+              <Title>Profit Rate</Title>
+              <StrongText>
+                {currentProfitRate
+                  ? `${currentProfitRate.times(100).toFixed(0)}%`
+                  : '-'}
+              </StrongText>
+            </DataBlock>
+          </SubRow>
+        </>
+      )}
       <Row justifyBetween>
         <Headline>
           Estimated Profits/unit if Ether hits USD
@@ -340,12 +392,6 @@ export default function RiskReturn() {
             {estimatedProfitRate
               ? `${estimatedProfitRate.times(100).toFixed(0)}%`
               : '-'}
-          </StrongText>
-        </DataBlock>
-        <DataBlock>
-          <Title>Current Price</Title>
-          <StrongText>
-            {currentEthPrice ? currentEthPrice.toFixed(2) : '-'}
           </StrongText>
         </DataBlock>
       </SubRow>

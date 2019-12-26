@@ -29,14 +29,16 @@ export function useEthBalance() {
   const [balance, setBalance] = useState()
 
   useEffect(() => {
-    library.eth
-      .getBalance(account)
-      .then(result => {
-        setBalance(new BigNumber(result))
-      })
-      .catch(() => {
-        setBalance()
-      })
+    if (library) {
+      library.eth
+        .getBalance(account)
+        .then(result => {
+          setBalance(new BigNumber(result))
+        })
+        .catch(() => {
+          setBalance()
+        })
+    }
   }, [account, library, blockNumber])
 
   return balance
@@ -49,15 +51,17 @@ export function useDaiBalance() {
   const [balance, setBalance] = useState()
 
   useEffect(() => {
-    daiContract.methods
-      .balanceOf(account)
-      .call()
-      .then(result => {
-        setBalance(new BigNumber(result))
-      })
-      .catch(() => {
-        setBalance()
-      })
+    if (daiContract) {
+      daiContract.methods
+        .balanceOf(account)
+        .call()
+        .then(result => {
+          setBalance(new BigNumber(result))
+        })
+        .catch(() => {
+          setBalance()
+        })
+    }
   }, [account, blockNumber, daiContract])
 
   return balance
@@ -94,15 +98,17 @@ export function useDaiAllowance() {
   )
 
   useEffect(() => {
-    daiContract.methods
-      .allowance(account, CRYPTO_STRUCTURED_FUND_ADDRESSES[networkId])
-      .call()
-      .then(result => {
-        setAllowance(new BigNumber(result))
-      })
-      .catch(() => {
-        setAllowance()
-      })
+    if (daiContract) {
+      daiContract.methods
+        .allowance(account, CRYPTO_STRUCTURED_FUND_ADDRESSES[networkId])
+        .call()
+        .then(result => {
+          setAllowance(new BigNumber(result))
+        })
+        .catch(() => {
+          setAllowance()
+        })
+    }
   }, [daiContract, account, networkId, blockNumber])
 
   return { allowance, approve }

@@ -86,6 +86,23 @@ export default function TargetReturn() {
     [daiPool, totalPoolInEth],
   )
 
+  const currentProfits = useMemo(() => {
+    const price = new BigNumber(currentEthPrice)
+    if (price.gt(priceToGetFullProfit)) {
+      return price.times(1.2)
+    } else if (totalPoolInEth) {
+      return totalPoolInEth.times(currentEthPrice).div(daiPool)
+    }
+  }, [currentEthPrice, daiPool, priceToGetFullProfit, totalPoolInEth])
+
+  const currentProfitRate = useMemo(
+    () =>
+      currentProfits && currentEthPrice
+        ? currentProfits.minus(currentEthPrice).div(currentEthPrice)
+        : null,
+    [currentEthPrice, currentProfits],
+  )
+
   const chartData = useMemo(() => {
     const fullProfitPrice = priceToGetFullProfit
       ? priceToGetFullProfit.toNumber()
@@ -271,17 +288,41 @@ export default function TargetReturn() {
           </PurchaseBlockBottom>
         </PurchaseBlock>
       </Row>
+      {!canPurchase && !canRedeem && (
+        <>
+          <Row>
+            <Headline>Your Profit accourding to current Ether Price</Headline>
+            <SubTitle>Unit: USD/ETH</SubTitle>
+          </Row>
+          <SubRow>
+            <DataBlock>
+              <Title>Current Price</Title>
+              <StrongText>
+                {currentEthPrice ? currentEthPrice.toFixed(2) : '-'}
+              </StrongText>
+            </DataBlock>
+            <DataBlock>
+              <Title>Outcome</Title>
+              <StrongText>
+                {currentProfits ? currentProfits.toFixed(4) : '-'}
+              </StrongText>
+            </DataBlock>
+            <DataBlock>
+              <Title>Profit Rate</Title>
+              <StrongText>
+                {currentProfitRate
+                  ? `${currentProfitRate.times(100).toFixed(0)}%`
+                  : '-'}
+              </StrongText>
+            </DataBlock>
+          </SubRow>
+        </>
+      )}
       <Row justifyBetween>
         <Headline>Estimated Ether Price that you will get...</Headline>
         <SubTitle>Unit: USD/ETH</SubTitle>
       </Row>
       <SubRow>
-        <DataBlock>
-          <Title>Current Price</Title>
-          <StrongText>
-            {currentEthPrice ? currentEthPrice.toFixed(2) : '-'}
-          </StrongText>
-        </DataBlock>
         <DataBlock>
           <Title>Full Profits</Title>
           <StrongText>

@@ -7,7 +7,6 @@ import ApplicationContextProvider, {
 import TransactionContextProvider, {
   Updater as TransactionContextUpdater,
 } from './contexts/transaction'
-import Web3Manager from './components/Web3Manager'
 import NetworkOnlyConnector from './connectors/NetworkOnlyConnector'
 import InjectedConnector from './connectors/InjectedConnector'
 import ThemeProvider, { GlobalStyle } from './themes'
@@ -48,9 +47,7 @@ function App() {
         <Updaters />
         <ThemeProvider>
           <GlobalStyle />
-          <Web3Manager>
-            <Router />
-          </Web3Manager>
+          <Router />
         </ThemeProvider>
       </ContextProviders>
     </Web3Provider>

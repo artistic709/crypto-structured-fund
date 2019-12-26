@@ -110,7 +110,7 @@ export default function Web3Status() {
   })
 
   const onClick = () => {
-    if (connectorName === 'Network' && (window.ethereum || window.web3)) {
+    if (window.ethereum || window.web3) {
       setConnector('Injected', { suppressAndThrowErrors: true }).catch(err => {
         if (err.code === Connector.errorCodes.UNSUPPORTED_NETWORK) {
           setError(err)

@@ -22,15 +22,17 @@ export function useRate() {
   const [rate, setRate] = useState()
 
   useEffect(() => {
-    fundContract.methods
-      .rate()
-      .call()
-      .then(result => {
-        setRate(new BigNumber(result).div(1e18))
-      })
-      .catch(() => {
-        setRate()
-      })
+    if (fundContract) {
+      fundContract.methods
+        .rate()
+        .call()
+        .then(result => {
+          setRate(new BigNumber(result).div(1e18))
+        })
+        .catch(() => {
+          setRate()
+        })
+    }
   }, [fundContract])
 
   return rate
@@ -42,18 +44,22 @@ export function useFundDates() {
   const [redeemStartingDate, setRedeemStartingDate] = useState()
 
   useEffect(() => {
-    Promise.all([
-      fundContract.methods.startBuy().call(),
-      fundContract.methods.startSell().call(),
-    ])
-      .then(([startBuy, startSell]) => {
-        setPurchaseExpiringDate(new BigNumber(startBuy).times(1000).toNumber())
-        setRedeemStartingDate(new BigNumber(startSell).times(1000).toNumber())
-      })
-      .catch(() => {
-        setPurchaseExpiringDate()
-        setRedeemStartingDate()
-      })
+    if (fundContract) {
+      Promise.all([
+        fundContract.methods.startBuy().call(),
+        fundContract.methods.startSell().call(),
+      ])
+        .then(([startBuy, startSell]) => {
+          setPurchaseExpiringDate(
+            new BigNumber(startBuy).times(1000).toNumber(),
+          )
+          setRedeemStartingDate(new BigNumber(startSell).times(1000).toNumber())
+        })
+        .catch(() => {
+          setPurchaseExpiringDate()
+          setRedeemStartingDate()
+        })
+    }
   }, [fundContract])
 
   return { purchaseExpiringDate, redeemStartingDate }
@@ -65,22 +71,25 @@ export function useDaiInvestorAmount() {
   const [amount, setAmount] = useState()
 
   useEffect(() => {
-    fundContract
-      .getPastEvents('Deposit', {
-        fromBlock: CRYPTO_STRUCTURED_FUND_CREATION_BLOCK,
-      })
-      .then(
-        events =>
-          events
-            .map(event => event.returnValues.depositor)
-            .filter((depositor, i, arr) => arr.indexOf(depositor) === i).length,
-      )
-      .then(result => {
-        setAmount(result)
-      })
-      .catch(() => {
-        setAmount()
-      })
+    if (fundContract) {
+      fundContract
+        .getPastEvents('Deposit', {
+          fromBlock: CRYPTO_STRUCTURED_FUND_CREATION_BLOCK,
+        })
+        .then(
+          events =>
+            events
+              .map(event => event.returnValues.depositor)
+              .filter((depositor, i, arr) => arr.indexOf(depositor) === i)
+              .length,
+        )
+        .then(result => {
+          setAmount(result)
+        })
+        .catch(() => {
+          setAmount()
+        })
+    }
   }, [fundContract, blockNumber])
 
   return amount
@@ -92,15 +101,17 @@ export function useDaiPool() {
   const [pool, setPool] = useState()
 
   useEffect(() => {
-    fundContract.methods
-      .totalSupply()
-      .call()
-      .then(result => {
-        setPool(new BigNumber(result))
-      })
-      .catch(() => {
-        setPool()
-      })
+    if (fundContract) {
+      fundContract.methods
+        .totalSupply()
+        .call()
+        .then(result => {
+          setPool(new BigNumber(result))
+        })
+        .catch(() => {
+          setPool()
+        })
+    }
   }, [fundContract, blockNumber])
 
   return pool
@@ -112,15 +123,17 @@ export function useDaiFundUnits() {
   const [balance, setBalance] = useState()
 
   useEffect(() => {
-    fundContract.methods
-      .balanceOf(account)
-      .call()
-      .then(result => {
-        setBalance(new BigNumber(result))
-      })
-      .catch(() => {
-        setBalance()
-      })
+    if (fundContract) {
+      fundContract.methods
+        .balanceOf(account)
+        .call()
+        .then(result => {
+          setBalance(new BigNumber(result))
+        })
+        .catch(() => {
+          setBalance()
+        })
+    }
   }, [fundContract, account])
 
   return balance
@@ -188,22 +201,24 @@ export function useEthInvestorAmount() {
   const [amount, setAmount] = useState()
 
   useEffect(() => {
-    fundContract
-      .getPastEvents('Invest', {
-        fromBlock: CRYPTO_STRUCTURED_FUND_CREATION_BLOCK,
-      })
-      .then(
-        events =>
-          events
-            .map(event => event.returnValues.investor)
-            .filter((investor, i, arr) => arr.indexOf(investor) === i).length,
-      )
-      .then(result => {
-        setAmount(result)
-      })
-      .catch(() => {
-        setAmount()
-      })
+    if (fundContract) {
+      fundContract
+        .getPastEvents('Invest', {
+          fromBlock: CRYPTO_STRUCTURED_FUND_CREATION_BLOCK,
+        })
+        .then(
+          events =>
+            events
+              .map(event => event.returnValues.investor)
+              .filter((investor, i, arr) => arr.indexOf(investor) === i).length,
+        )
+        .then(result => {
+          setAmount(result)
+        })
+        .catch(() => {
+          setAmount()
+        })
+    }
   }, [fundContract, blockNumber])
 
   return amount
@@ -215,15 +230,17 @@ export function useEthPool() {
   const [pool, setPool] = useState()
 
   useEffect(() => {
-    fundContract.methods
-      .totalInvestment()
-      .call()
-      .then(result => {
-        setPool(new BigNumber(result))
-      })
-      .catch(() => {
-        setPool()
-      })
+    if (fundContract) {
+      fundContract.methods
+        .totalInvestment()
+        .call()
+        .then(result => {
+          setPool(new BigNumber(result))
+        })
+        .catch(() => {
+          setPool()
+        })
+    }
   }, [fundContract, blockNumber])
 
   return pool
@@ -235,15 +252,17 @@ export function useEthFundUnits() {
   const [balance, setBalance] = useState()
 
   useEffect(() => {
-    fundContract.methods
-      .investmentOf(account)
-      .call()
-      .then(result => {
-        setBalance(new BigNumber(result))
-      })
-      .catch(() => {
-        setBalance()
-      })
+    if (fundContract) {
+      fundContract.methods
+        .investmentOf(account)
+        .call()
+        .then(result => {
+          setBalance(new BigNumber(result))
+        })
+        .catch(() => {
+          setBalance()
+        })
+    }
   }, [fundContract, account])
 
   return balance

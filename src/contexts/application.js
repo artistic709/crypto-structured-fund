@@ -7,6 +7,7 @@ import React, {
   useEffect,
 } from 'react'
 import { useWeb3Context } from 'web3-react'
+import { ethers } from 'ethers'
 import { safeAccess } from '../utils'
 
 const BLOCK_NUMBER = 'BLOCK_NUMBER'
@@ -84,12 +85,15 @@ export function Updater() {
       }
 
       update()
-      const subscription = library.eth.subscribe('newBlockHeaders')
-      subscription.on('data', update)
+      const ethersLibrary = new ethers.providers.JsonRpcProvider(
+        library.currentProvider.host,
+      )
+      ethersLibrary.pollingInterval = 8000
+      ethersLibrary.on('block', update)
 
       return () => {
         stale = true
-        subscription.unsubscribe()
+        ethersLibrary.removeListener('block', update)
       }
     }
   }, [networkId, library, updateBlockNumber])
