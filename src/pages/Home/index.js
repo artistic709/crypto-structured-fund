@@ -160,11 +160,11 @@ export default function Home() {
             </HeroHeadline>
             <HeroText>
               <Bold>Preferred Share</Bold> provides up to{' '}
-              <Underline>20%</Underline> APR and a prior claim on distrubutions.
+              <Underline>20%</Underline> APR and a prior claim on distribution.
             </HeroText>
             <HeroText>
               <Bold>Excess Return</Bold> let you lever on the whole fund with a
-              chance of winnning unlimited proftis.
+              chance of winning unlimited profits.
             </HeroText>
             <HeroButton onClick={callToAction}>Get Started</HeroButton>
           </HeroContent>
