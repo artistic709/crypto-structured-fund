@@ -122,18 +122,67 @@ contract ERC20 {
 
 contract ERC20Mintable is ERC20 {
 
-    function _mint(address to, uint256 amount) internal {
+    address owner;
+    string public name;
+    string public symbol;
+    uint8 public decimals;
+
+    /**
+     * @dev Throws if called by any account other than the owner.
+     */
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+
+    function mint(address to, uint256 amount) external onlyOwner {
         _balances[to] = _balances[to].add(amount);
         _totalSupply = _totalSupply.add(amount);
         emit Transfer(address(0), to, amount);
     }
 
-    function _burn(address from, uint256 amount) internal {
+    function burn(address from, uint256 amount) external onlyOwner {
         _balances[from] = _balances[from].sub(amount);
         _totalSupply = _totalSupply.sub(amount);
         emit Transfer(from, address(0), amount);
     }
 
+    function set(address _owner, string calldata _name, string calldata _symbol, uint8 _decimals) external {
+        require(owner == address(0));
+        owner = _owner;
+        name = _name;
+        symbol = _symbol;
+        decimals = _decimals;
+    }
+
+}
+
+contract tokenFactory {
+    address public template;
+
+    event NewTokenCreated(address owner, address token);
+
+    function newToken(address _owner, string calldata _name, string calldata _symbol, uint8 _decimals) external returns(address) {
+        address token = createClone(template);
+        ERC20Mintable(token).set(_owner, _name, _symbol, _decimals);
+        emit NewTokenCreated(_owner, token);
+    }
+
+    function createClone(address target) internal returns (address result) {
+        bytes20 targetBytes = bytes20(target);
+        assembly {
+            let clone := mload(0x40)
+            mstore(clone, 0x3d602d80600a3d3981f3363d3d373d3d3d363d73000000000000000000000000)
+            mstore(add(clone, 0x14), targetBytes)
+            mstore(add(clone, 0x28), 0x5af43d82803e903d91602b57fd5bf30000000000000000000000000000000000)
+            result := create(0, clone, 0x37)
+        }
+    }
+
+    constructor() public {
+        ERC20Mintable instance = new ERC20Mintable();
+        template = address(instance);
+    }
 }
 
 
@@ -142,16 +191,9 @@ contract Exchange {
     function swapTokenToEther(address token, uint srcAmount, uint minConversionRate) public returns(uint);
 }
 
-contract CryptoStructuredFund is ERC20Mintable {
+contract CryptoStructuredFund {
 
     using SafeMath for uint256;
-
-    event Deposit(address indexed depositor, uint256 amount);
-    event Invest(address indexed investor, uint256 amount);
-
-    string public constant name = "CryptoStructuredFund";
-    string public constant symbol = "CSF";
-    uint8 public constant decimals = 18;
 
     uint256 public startBuy;
     uint256 public stopBuy;
@@ -161,13 +203,18 @@ contract CryptoStructuredFund is ERC20Mintable {
     bool public fulfilled;
     address payable wallet;
 
+    address public factory = address(0xbeef);
+
+    ERC20Mintable public PS;
+    ERC20Mintable public ER;
+
     uint256 constant fee = 8e15;
 
-    mapping(address => uint256) public investmentOf;
-    uint256 public totalInvestment;
-
     Exchange kyberEx = Exchange(0x818E6FECD516Ecc3849DAf6845e3EC868087B755);
-    ERC20 DAI = ERC20(0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359);
+    ERC20 DAI = ERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F);
+
+    event PurchacePS(address indexed purchacer, uint256 amount);
+    event PurchaceER(address indexed purchacer, uint256 amount);
 
     function set(uint256 _startBuy, uint256 _stopBuy, uint256 _startSell, uint256 _stopSell, uint256 _rate, address payable _wallet) public {
         require(stopBuy == 0 && stopSell == 0 && wallet == address(0));
@@ -178,43 +225,43 @@ contract CryptoStructuredFund is ERC20Mintable {
         rate = _rate;
         wallet = _wallet;
         DAI.approve(address(kyberEx), uint256(-1));
+        PS = ERC20Mintable(tokenFactory(factory).newToken(address(this), "ETH20DAIPreferredShare", "PSDAI", 18));
+        ER = ERC20Mintable(tokenFactory(factory).newToken(address(this), "ETH20DAIExcessReturn", "ERETH", 18));
     }
 
     // deposit DAI to earn interest
-    function deposit(uint256 amount) public {
+    function purchacePS(uint256 amount) public {
         require(now < startBuy);
         require(DAI.transferFrom(msg.sender, address(this), amount));
         require(DAI.transfer(wallet, amount.mul(fee).div(1e18)));
-        _mint(msg.sender, amount);
-        emit Deposit(msg.sender, amount);
+        PS.mint(msg.sender, amount);
+        emit PurchacePS(msg.sender, amount);
     }
 
     // invest ether
-    function invest() public payable {
+    function purchaceER() public payable {
         require(now < startBuy);
         require(wallet.send(msg.value.mul(fee).div(1e18)));
-        investmentOf[msg.sender] = investmentOf[msg.sender].add(msg.value);
-        totalInvestment = totalInvestment.add(msg.value);
-        emit Invest(msg.sender, msg.value);
+        ER.mint(msg.sender, msg.value);
+        emit PurchaceER(msg.sender, msg.value);
     }
 
     // withdraw DAI
-    function withdraw(uint256 amount) public {
+    function redeemPS(uint256 amount) public {
         require(now > startSell);
         
-        uint256 withdrawal = amount.mul(DAI.balanceOf(address(this))).div(_totalSupply);
-        _burn(msg.sender, amount);
+        uint256 withdrawal = amount.mul(DAI.balanceOf(address(this))).div(PS.totalSupply());
+        PS.burn(msg.sender, amount);
 
-        DAI.transfer(msg.sender, withdrawal);
+        require(DAI.transfer(msg.sender, withdrawal));
     }
 
     // redeem ether
-    function redeem(uint256 amount) public {
+    function redeemER(uint256 amount) public {
         require(fulfilled);
 
-        uint256 withdrawal = amount.mul(address(this).balance).div(totalInvestment);
-        investmentOf[msg.sender] = investmentOf[msg.sender].sub(amount);
-        totalInvestment = totalInvestment.sub(amount);
+        uint256 withdrawal = amount.mul(address(this).balance).div(ER.totalSupply());
+        ER.burn(msg.sender, amount);
 
         msg.sender.transfer(withdrawal);
     }
@@ -243,7 +290,7 @@ contract CryptoStructuredFund is ERC20Mintable {
         DAI.transfer(msg.sender, IncomingDAI.div(1000)); // 0.1% rebate to pusher
 
 
-        if(DAI.balanceOf(address(this)) >= _totalSupply.mul(rate).div(1e18))
+        if(DAI.balanceOf(address(this)) >= PS.totalSupply().mul(rate).div(1e18))
             fulfilled = true;
 
     }
