@@ -162,8 +162,8 @@ contract tokenFactory {
 
     event NewTokenCreated(address owner, address token);
 
-    function newToken(address _owner, string calldata _name, string calldata _symbol, uint8 _decimals) external returns(address) {
-        address token = createClone(template);
+    function newToken(address _owner, string calldata _name, string calldata _symbol, uint8 _decimals) external returns(address token) {
+        token = createClone(template);
         ERC20Mintable(token).set(_owner, _name, _symbol, _decimals);
         emit NewTokenCreated(_owner, token);
     }
