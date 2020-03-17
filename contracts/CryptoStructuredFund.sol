@@ -157,7 +157,7 @@ contract ERC20Mintable is ERC20 {
 
 }
 
-contract tokenFactory {
+contract TokenFactory {
     address public template;
 
     event NewTokenCreated(address owner, address token);
@@ -203,18 +203,22 @@ contract CryptoStructuredFund {
     bool public fulfilled;
     address payable wallet;
 
-    address public factory = address(0xbeef);
+    TokenFactory public tokenFactory = TokenFactory(0xbeef);
 
     ERC20Mintable public PS;
     ERC20Mintable public ER;
 
     uint256 constant fee = 8e15;
 
-    Exchange kyberEx = Exchange(0x818E6FECD516Ecc3849DAf6845e3EC868087B755);
-    ERC20 DAI = ERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F);
+    Exchange public kyberEx = Exchange(0x818E6FECD516Ecc3849DAf6845e3EC868087B755);
+    ERC20 public DAI = ERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F);
 
-    event PurchacePS(address indexed purchacer, uint256 amount);
-    event PurchaceER(address indexed purchacer, uint256 amount);
+    event PurchasePS(address indexed investor, uint256 amount);
+    event PurchaseER(address indexed investor, uint256 amount);
+    event RedeemPS(address indexed investor, uint256 amount);
+    event RedeemER(address indexed investor, uint256 amount);
+    event Push(uint256 amount, uint256 price);
+    event Pull(uint256 amount, uint256 price);
 
     function set(uint256 _startBuy, uint256 _stopBuy, uint256 _startSell, uint256 _stopSell, uint256 _rate, address payable _wallet) public {
         require(stopBuy == 0 && stopSell == 0 && wallet == address(0));
@@ -225,25 +229,25 @@ contract CryptoStructuredFund {
         rate = _rate;
         wallet = _wallet;
         DAI.approve(address(kyberEx), uint256(-1));
-        PS = ERC20Mintable(tokenFactory(factory).newToken(address(this), "ETH20DAIPreferredShare", "PSDAI", 18));
-        ER = ERC20Mintable(tokenFactory(factory).newToken(address(this), "ETH20DAIExcessReturn", "ERETH", 18));
+        PS = ERC20Mintable(tokenFactory.newToken(address(this), "ETH20DAIPreferredShare", "PSDAI", 18));
+        ER = ERC20Mintable(tokenFactory.newToken(address(this), "ETH20DAIExcessReturn", "ERETH", 18));
     }
 
     // deposit DAI to earn interest
-    function purchacePS(uint256 amount) public {
+    function purchasePS(uint256 amount) public {
         require(now < startBuy);
         require(DAI.transferFrom(msg.sender, address(this), amount));
         require(DAI.transfer(wallet, amount.mul(fee).div(1e18)));
         PS.mint(msg.sender, amount);
-        emit PurchacePS(msg.sender, amount);
+        emit PurchasePS(msg.sender, amount);
     }
 
     // invest ether
-    function purchaceER() public payable {
+    function purchaseER() public payable {
         require(now < startBuy);
         require(wallet.send(msg.value.mul(fee).div(1e18)));
         ER.mint(msg.sender, msg.value);
-        emit PurchaceER(msg.sender, msg.value);
+        emit PurchaseER(msg.sender, msg.value);
     }
 
     // withdraw DAI
@@ -254,6 +258,7 @@ contract CryptoStructuredFund {
         PS.burn(msg.sender, amount);
 
         require(DAI.transfer(msg.sender, withdrawal));
+        emit RedeemPS(msg.sender, withdrawal);
     }
 
     // redeem ether
@@ -264,6 +269,7 @@ contract CryptoStructuredFund {
         ER.burn(msg.sender, amount);
 
         msg.sender.transfer(withdrawal);
+        emit RedeemER(msg.sender, withdrawal);
     }
 
     //buy ether via KyberSwap
@@ -276,6 +282,7 @@ contract CryptoStructuredFund {
         uint256 IncomingEther = kyberEx.swapTokenToEther(address(DAI), amount, 1);
 
         msg.sender.transfer(IncomingEther.div(1000)); // 0.1% rebate to pusher
+        emit Push(amount, IncomingEther.div(amount));
     }
 
     //sell ether to DAI 
@@ -288,6 +295,7 @@ contract CryptoStructuredFund {
         uint256 IncomingDAI = kyberEx.swapEtherToToken.value(amount)(address(DAI), 1);
 
         DAI.transfer(msg.sender, IncomingDAI.div(1000)); // 0.1% rebate to pusher
+        emit Pull(amount, amount.div(IncomingDAI));
 
 
         if(DAI.balanceOf(address(this)) >= PS.totalSupply().mul(rate).div(1e18))
@@ -305,13 +313,14 @@ contract CryptoStructuredFund {
 
 }
 
-contract factory {
+contract FundFactory {
     using SafeMath for uint256;
     
-    address public template = address(0x692a70D2e424a56D2C6C27aA97D1a86395877b3A);
+    address public template = address(0x04D2E3Eb056a051A3c4846Fd37139bbC983582f2);
 
     address[] public CSFs;
 
+    // BugFix
     function newCSF(uint256 startTime, uint256 period, uint256 duration, uint256 rate, address payable wallet) public {
         address payable CSF = address(uint160(createClone(template)));
         CryptoStructuredFund(CSF).set(startTime, startTime.add(period), startTime.add(duration), startTime.add(period).add(duration), rate, wallet);
